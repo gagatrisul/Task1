@@ -1,0 +1,21 @@
+Task1:
+
+Step1: I have login in AWS account created one ubuntu 16.04 instance
+
+Step2: I have installed the Docker in same machine
+
+Step3 : I have write Dockerfile
+
+FROM ubuntu:16.04
+RUN apt-get update
+RUN apt-get install -y apache2
+EXPOSE 80
+CMD ["apache2ctl", "-D", "FOREGROUND]
+
+Step4: I have switch to myimages folder and run the Dockerfile
+
+with below commaand 
+
+docker build -t ubuntu:web .
+
+6e233882eea0 (Image ID for refrence)

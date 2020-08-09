@@ -1,0 +1,20 @@
+gagantrisul:
+  image: web/gagantrisul
+  ports:
+    - "2181:2181"
+kafka:
+  build: .
+  ports:
+    - "9092:9092"
+redis:
+  build:
+  ports:
+    - "6379:6379"
+  links:
+    - gagantrisul:gt
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: 172.31.39.128
+    KAFKA_CREATE_TOPICS: "test:1:1"
+    REDIS_ADVERTISED_HOST_NAME: 172.31.39.128
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
