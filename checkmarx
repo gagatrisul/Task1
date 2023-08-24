@@ -1,0 +1,42 @@
+name: Checkmarx Scan for Mule App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  checkmarx_scan:
+    name: Checkmarx Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Download Checkmarx CLI
+        run: |
+          curl -o cxcli.zip https://download.checkmarx.com/9.0.0/Plugins/CxConsolePlugin-2022.sp1.zip
+          unzip cxcli.zip -d cxcli
+          chmod +x ./cxcli/runCxConsole.sh
+
+      - name: Build Mule Application
+        run: mvn clean package -DskipTests
+
+      - name: Run Checkmarx Scan
+        run: |
+          ./cxcli/runCxConsole.sh scan -v -CxServer "$CX_SERVER_URL" -CxToken "$CX_ACCESS_TOKEN" -LocationType "folder" -LocationPath "${GITHUB_WORKSPACE}" -Preset "$CX_PRESET" -SASTHigh "$CX_SAST_HIGH" -SASTMedium "$CX_SAST_MEDIUM" -SASTLow "$CX_SAST_LOW"
+
+    env:
+      CX_SERVER_URL: ${{ secrets.CX_SERVER_URL }}
+      CX_ACCESS_TOKEN: ${{ secrets.CX_ACCESS_TOKEN }}
+      CX_PRESET: YourPresetName
+      CX_SAST_HIGH: true
+      CX_SAST_MEDIUM: true
+      CX_SAST_LOW: true
