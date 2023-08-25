@@ -1,0 +1,42 @@
+name: Mule JAR Deploy
+
+on:
+  push:
+    branches:
+      - main  # Or your desired branch name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Or your desired runner environment
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11  # Or your desired Java version
+
+      - name: Build Mule JAR
+        run: mvn clean package  # Or your build command
+
+      - name: Deploy to Nexus/Artifactory
+        run: |
+          # Your deployment script/command here
+##################################################################
+- name: Deploy to Nexus
+  run: |
+    mvn deploy \
+      -Dmaven.test.skip=true \
+      -DskipTests \
+      -DrepositoryId=nexus \
+      -Durl=https://nexus.example.com/repository/maven-releases \
+      -DgroupId=your.group.id \
+      -DartifactId=your-artifact-id \
+      -Dversion=your-version \
+      -Dpackaging=jar \
+      -Dfile=target/your-artifact.jar
+  env:
+    MAVEN_CLI_OPTS: -s ${{ secrets.MAVEN_SETTINGS_XML }}  # If using settings.xml
+    MAVEN_OPTS: -Xmx512m  # Optional, adjust as needed
