@@ -25,6 +25,40 @@ jobs:
         run: |
           # Your deployment script/command here
 ##################################################################
+name: Upload JAR to Nexus
+
+on:
+  push:
+    branches:
+      - main  # Or your desired branch name
+  workflow_dispatch:  # Enable manual triggering
+
+jobs:
+  upload-to-nexus:
+    runs-on: ubuntu-latest  # Or your desired runner environment
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build JAR
+        run: |
+          # Replace this with your actual build command
+          mvn clean package
+
+      - name: Upload JAR to Nexus
+        run: |
+          NEXUS_USERNAME=${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD=${{ secrets.NEXUS_PASSWORD }}
+          NEXUS_URL=https://nexus.example.com/repository/maven-releases  # Replace with your Nexus URL
+          GROUP_ID=com.example  # Replace with your Group ID
+          ARTIFACT_ID=my-artifact  # Replace with your Artifact ID
+          VERSION=1.0.0  # Replace with your Artifact Version
+
+          # Upload the JAR to Nexus using curl
+          curl -v -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" --upload-file target/my-artifact-1.0.0.jar "$NEXUS_URL/$GROUP_ID/$ARTIFACT_ID/$VERSION/$ARTIFACT_ID-$VERSION.jar"
+
+##################################################################
 - name: Deploy to Nexus
   run: |
     mvn deploy \
