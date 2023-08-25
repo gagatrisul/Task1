@@ -1,0 +1,37 @@
+name: Rollback on Failure
+
+on:
+  workflow_run:
+    workflows: ["Your Deployment Workflow Name"]
+    types:
+      - completed
+
+jobs:
+  rollback-on-failure:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Rollback using AnyPoint Platform API
+        run: |
+          # Your rollback script/command here
+#############################################################################################
+
+#!/bin/bash
+
+# Anypoint Platform Authentication
+ANYPNT_USERNAME="your_username"
+ANYPNT_PASSWORD="your_password"
+ANYPNT_ORG="your_organization_name"
+ANYPNT_ENV="your_environment_name"
+ANYPNT_APP_NAME="your_application_name"
+ANYPNT_DEPLOYMENT_ID="deployment_id_to_rollback_to"
+
+# Authenticate and get access token
+ACCESS_TOKEN=$(curl -X POST "https://anypoint.mulesoft.com/accounts/login" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"username\":\"$ANYPNT_USERNAME\",\"password\":\"$ANYPNT_PASSWORD\"}" | jq -r .access_token)
+
+# Rollback deployment
+curl -X POST "https://anypoint.mulesoft.com/hybrid/api/v1/organizations/$ANYPNT_ORG/environments/$ANYPNT_ENV/applications/$ANYPNT_APP_NAME/deployment/$ANYPNT_DEPLOYMENT_ID/rollback" -H "Authorization: Bearer $ACCESS_TOKEN"
