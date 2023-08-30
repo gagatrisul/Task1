@@ -12,3 +12,5 @@ mvn deploy -DskipMunitTests -X -DmuleDeploy \
 <connectedAppClientSecret>${cloudHub.connectedAppClientSecret}</connectedAppClientSecret>
 <connectedAppGrantType>${cloudHub.connectedAppGrantType}</connectedAppGrantType>
 "client_credentials"
+
+<businessGroupId>**********-e628</businessGroupId>
