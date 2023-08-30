@@ -7,3 +7,7 @@ mvn deploy -DskipMunitTests -X -DmuleDeploy \
          -Danypoint.username="$USERNAME" \
          -Danypoint.password="$PASSWORD" \
          -Ddecryption.key="$KEY"
+
+<connectedAppClientId>${cloudHub.connectedAppClientId}</connectedAppClientId>
+<connectedAppClientSecret>${cloudHub.connectedAppClientSecret}</connectedAppClientSecret>
+<connectedAppGrantType>${cloudHub.connectedAppGrantType}</connectedAppGrantType>
