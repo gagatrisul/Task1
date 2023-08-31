@@ -14,3 +14,8 @@ mvn deploy -DskipMunitTests -X -DmuleDeploy \
 "client_credentials"
 
 <businessGroupId>**********-e628</businessGroupId>
+<configuration>
+
+   <classifier>mule-application</classifier>
+
+</configuration>
