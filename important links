@@ -19,3 +19,7 @@ mvn deploy -DskipMunitTests -X -DmuleDeploy \
    <classifier>mule-application</classifier>
 
 </configuration>
+
+- name: Configure Maven settings.xml
+      run: |
+        echo "${{ secrets.MAVEN_SETTINGS_XML }}" > $HOME/.m2/settings.xml
